@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Irene Bai" />
+
+
+<title>Code_Appendix</title>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Irene's World of Causal Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="final.html">Posts of Casual Analysis</a>
+</li>
+<li>
+  <a href="Code_appendix.html">Code-Appendix</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/bail19">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Code_Appendix</h1>
+<h4 class="author">Irene Bai</h4>
+<h4 class="date">5/6/2022</h4>
+
+</div>
+
+
+<pre class="r"><code>suppressMessages(library(tidyverse))
+suppressMessages(library(ggdag))
+suppressMessages(library(dplyr))
+suppressMessages(library(ggraph))
+suppressMessages(library(visdat))
+suppressMessages(library(broom))
+suppressMessages(library(visdat))
+suppressMessages(library(mice))
+suppressMessages(library(causaldata))
+suppressMessages(library(smd))
+suppressMessages(library(gtsummary))
+suppressMessages(library(survey))
+suppressMessages(library(MatchIt))</code></pre>
+<div id="part-1-overview" class="section level1">
+<h1>Part 1: Overview</h1>
+<pre class="r"><code>shelter &lt;- read.csv(&quot;shelter.csv&quot;)
+
+
+#Delete Animal Name
+shelter &lt;- shelter[,-2]
+shelter &lt;- shelter[which(shelter$Age &gt;-1),]
+
+#Separate intakeDate and outcomeDate
+shelter &lt;- separate(shelter, col=Intake.Date, into=c(&quot;IntakeYear&quot;,&quot;IntakeMonth&quot;,&quot;IntakeDay&quot;),sep=&quot;-&quot;)
+shelter &lt;- separate(shelter, col=Outcome.Date, into=c(&quot;OutcomeYear&quot;,&quot;OutcomeMonth&quot;,&quot;OutcomeDay&quot;),sep=&quot;-&quot;)
+shelter$IntakeYear &lt;- as.numeric(shelter$IntakeYear)
+shelter$IntakeMonth &lt;- as.numeric(shelter$IntakeMonth)
+shelter$IntakeDay &lt;- as.numeric(shelter$IntakeDay)
+shelter$OutcomeYear &lt;- as.numeric(shelter$OutcomeYear)
+shelter$OutcomeMonth &lt;- as.numeric(shelter$OutcomeMonth)
+shelter$OutcomeDay &lt;- as.numeric(shelter$OutcomeDay)
+
+#Calculate time stayed in the shelter
+year = (shelter$OutcomeYear - shelter$IntakeYear)*365
+month = (shelter$OutcomeMonth - shelter$IntakeMonth)*30
+day = (shelter$OutcomeDay - shelter$IntakeDay)
+shelter$stayTime &lt;- year+month+day</code></pre>
+<pre class="r"><code># Check Condition
+#shelter &lt;- shelter %&gt;% 
+#  mutate_if(is.character, as.factor)
+
+#nlevels(shelter$Animal.Type)
+#nlevels(shelter$Primary.Color)
+#nlevels(shelter$Secondary.Color)
+#nlevels(shelter$Sex)
+#nlevels(shelter$Intake.Condition)
+#nlevels(shelter$Intake.Subtype)
+#nlevels(shelter$Intake.Type)
+#nlevels(shelter$Jurisdiction)
+#nlevels(shelter$Outcome.Type)</code></pre>
+<pre class="r"><code>shelterClean &lt;- shelter[, -c(1,6,9,10,14,16,17,18,20,21,22,23)]
+shelterClean &lt;- as.data.frame(apply(shelterClean, c(1, 2), str_remove_all, &quot; &quot;))
+shelterClean$Age &lt;- as.numeric(shelterClean$Age)
+shelterClean$IntakeYear &lt;- as.numeric(shelterClean$IntakeYear)
+shelterClean$OutcomeYear &lt;- as.numeric(shelterClean$OutcomeYear)
+shelterClean$stayTime &lt;- as.numeric(shelterClean$stayTime)
+shelterClean &lt;- shelterClean[-which(shelterClean$Primary.Color == &quot;UNKNOWN&quot;),]
+shelter &lt;- shelter[-which(shelter$Primary.Color == &quot;UNKNOWN&quot;),]</code></pre>
+<pre class="r"><code>#Categorize Primary color
+
+for(i in 1:length(shelterClean$Primary.Color)) {
+  a &lt;- shelterClean$Primary.Color[i]
+  if(a == &quot;APRICOT&quot; || a == &quot;BLUE&quot; || a == &quot;BLUECREAM&quot; || a == &quot;BLONDE&quot; ||  a == &quot;CREAM&quot; || a == &quot;FAWN&quot; || a ==&quot;GOLD&quot; || a == &quot;GREEN&quot; || a == &quot;ORANGE&quot; || a == &quot;PEACH&quot; || a == &quot;PINK&quot; || a == &quot;RED&quot; || a == &quot;SILVER&quot; || a == &quot;WHEAT&quot; || a == &quot;WHITE&quot; || a == &quot;YELLOW&quot; || a == &quot;CALICO&quot; ||a == &quot;SNOWSHOE&quot; || a == &quot;TRICOLOR&quot;) {
+    shelterClean$PrimaryColor[i] &lt;- &quot;Light-Pure&quot;
+  }
+  
+  if(a == &quot;BLUEPT&quot; || a == &quot;CREAMPT&quot; || a == &quot;BCLYNXPT&quot; || a == &quot;LCLYNXPT&quot; || a == &quot;LILYNXPT&quot; || a == &quot;RDLYNXPT&quot; || a == &quot;SLLYNXPT&quot; || a == &quot;STLYNXPT&quot; || a == &quot;FLAMEPT&quot; || a == &quot;L-CPT&quot; || a ==&quot;LILACPT&quot; || a == &quot;B-CPT&quot;) {
+    shelterClean$PrimaryColor[i] &lt;- &quot;Light-Point&quot;
+  }
+  
+  if(a == &quot;BLUETABBY&quot; || a ==  &quot;CRMTABBY&quot; || a == &quot;CRMTIGER&quot; || a == &quot;ORGTABBY&quot; || a == &quot;ORGTIGER&quot; || a == &quot;SLVRTABBY&quot; || a == &quot;BLUEMERLE&quot; ||  a == &quot;BLUETICK&quot; || a == &quot;BLBRINDLE&quot; || a == &quot;BLUEBRIND&quot; || a == &quot;DAPPLE&quot; || a == &quot;YBRINDLE&quot;) {
+    shelterClean$PrimaryColor[i] &lt;- &quot;Light-Tabby&quot;
+  }
+  
+  if(a == &quot;BLACK&quot; || a == &quot;BLKSMOKE&quot; || a == &quot;BROWN&quot; || a ==  &quot;BUFF&quot; || a ==  &quot;CHOCOLATE&quot; || a == &quot;GRAY&quot; || a == &quot;LIVER&quot; || a ==  &quot;RUDDY&quot;  || a ==  &quot;SABLE&quot; || a == &quot;SEAL&quot; || a == &quot;TAN&quot; || a == &quot;TORBI&quot; || a == &quot;TORTIE&quot; || a == &quot;CALICODIL&quot; || a == &quot;CALICOPT&quot; || a == &quot;CALICOTAB&quot;) {
+    shelterClean$PrimaryColor[i] &lt;- &quot;Dark-Pure&quot;
+  }
+  
+  if(a ==  &quot;BLLYNXPT&quot; || a == &quot;CRLYNXPT&quot; || a == &quot;LYNXPT&quot; || a == &quot;S-TPT&quot; || a == &quot;SEALPT&quot; || a == &quot;TORTIEPT&quot; || a == &quot;C-TPT&quot; || a ==  &quot;CHOCPT&quot;) {
+    shelterClean$PrimaryColor[i] &lt;- &quot;Dark-Point&quot;
+  }
+  
+  if(a == &quot;BLKTABBY&quot; || a ==  &quot;BLKTIGER&quot; || a ==  &quot;BRNTABBY&quot; || a == &quot;BRNTIGER&quot; || a ==  &quot;GRAYTABBY&quot; || a ==  &quot;GRAYTIGER&quot; || a == &quot;TORTIEMUT&quot; || a == &quot;TORTIEDIL&quot; || a ==  &quot;BRBRINDLE&quot; || a == &quot;BRNMERLE&quot; || a == &quot;LIVERTICK&quot; || a == &quot;REDMERLE&quot;) {
+    shelterClean$PrimaryColor[i] &lt;- &quot;Dark-Tabby&quot;
+  }
+}</code></pre>
+<pre class="r"><code>#shelterClean$PrimaryColor &lt;- as.factor(shelterClean$PrimaryColor)
+#levels(shelterClean$PrimaryColor)</code></pre>
+<pre class="r"><code>#Separate Primary Color
+shelterClean &lt;- separate(shelterClean, col=PrimaryColor, into=c(&quot;PrimaryColor&quot;,&quot;PrimaryPattern&quot;),sep=&quot;-&quot;)</code></pre>
+<pre class="r"><code>#Categorize Secondary color 
+for(i in 1:length(shelterClean$Secondary.Color)) {
+  a &lt;- shelterClean$Secondary.Color[i]
+  if(a ==  &quot;APRICOT&quot; || a == &quot;BLUE&quot; || a==&quot;CREAM&quot; ||a==&quot;FAWN&quot; ||a==&quot;GOLD&quot; ||a==&quot;GREEN&quot; ||a==&quot;ORANGE&quot; ||a==&quot;PINK&quot;        || a==&quot;PURPLE&quot;  ||a==&quot;RED&quot; ||a==&quot;SILVER&quot; ||a==&quot;WHEAT&quot;  ||a==&quot;WHITE&quot;||a==&quot;YELLOW&quot; ) {
+    shelterClean$SecondaryColor[i] &lt;- &quot;Light-Pure&quot;
+  }
+  
+  else if(a == &quot;BLBRINDLE&quot; || a== &quot;BLUEPT&quot; || a==&quot;CRMTABBY&quot; || a== &quot;FLAMEPT&quot; ||a==&quot;ORGTABBY&quot; ||a==&quot;SLVRTABBY&quot;) {
+    shelterClean$SecondaryColor[i] &lt;- &quot;Light-Tabby&quot;
+  }
+  
+  else if(a ==  &quot;BLACK&quot; || a== &quot;BLKSMOKE&quot; || a==&quot;BROWN&quot;  ||a ==&quot;BUFF&quot; ||a== &quot;GRAY&quot; ||a==&quot;SABLE&quot; ||a==&quot;TAN&quot;        || a==&quot;TORBI&quot; ||a==&quot;TORTIE&quot; || a ==  &quot;CALICO&quot; || a==&quot;TRICOLOR&quot;) {
+    shelterClean$SecondaryColor[i] &lt;- &quot;Dark-Pure&quot;
+  }
+  
+  else if(a ==&quot;BLKTABBY&quot; || a==&quot;BLKTIGER&quot; || a==&quot;BRBRINDLE&quot; || a== &quot;BRNMERLE&quot; ||a == &quot;BRNTABBY&quot; || a == &quot;BRNTIGER&quot; || a == &quot;CHOCPT&quot; || a==&quot;GRAYTABBY&quot; || a==&quot;LYNXPT&quot; || a==&quot;SEALPT&quot; ||a ==&quot;TORTIEDIL&quot;) {
+    shelterClean$SecondaryColor[i] &lt;- &quot;Dark-Tabby&quot;
+  }
+  
+  else {
+    shelterClean$SecondaryColor[i] &lt;- &quot;Other-Other&quot;
+  }
+  
+}</code></pre>
+<pre class="r"><code>#Separate Secondary Color
+shelterClean &lt;- separate(shelterClean, col=SecondaryColor, into=c(&quot;SecondaryColor&quot;,&quot;SecondaryPattern&quot;),sep=&quot;-&quot;)</code></pre>
+<pre class="r"><code>#Delete Original Primary&amp;Secondary Color
+shelterClean &lt;- shelterClean[,-c(2,3)] </code></pre>
+<pre class="r"><code>#Modify Jurisdiction
+#mean(shelter$Jurisdiction == &quot;LONG BEACH&quot;)
+shelterClean$Jurisdiction &lt;- ifelse(shelterClean$Jurisdiction == &quot;LONGBEACH&quot;, &quot;LongBeach&quot;, &quot;Others&quot;)</code></pre>
+<pre class="r"><code>#Modify Animal Type
+#mean(shelter$Animal.Type == &quot;BIRD&quot;)
+#mean(shelter$Animal.Type == &quot;WILD&quot;)
+shelterClean$Animal.Type &lt;- ifelse(shelterClean$Animal.Type== &quot;CAT&quot;, &quot;CAT&quot;, &quot;Other&quot;)
+shelterClean$Animal.Type &lt;- ifelse(shelter$Animal.Type== &quot;DOG&quot;, &quot;DOG&quot;, shelterClean$Animal.Type)
+#mean(shelterClean$Animal.Type == &quot;Other&quot;)</code></pre>
+<pre class="r"><code>#Modify Intake.Condition
+#mean(shelter$Intake.Condition == &quot;WELFARE SEIZURES&quot;)
+shelterClean$Intake.Condition &lt;- ifelse(shelterClean$Intake.Condition== &quot;NORMAL&quot;, &quot;NORMAL&quot;, &quot;Other&quot;)
+shelterClean$Intake.Condition &lt;- ifelse(shelter$Intake.Condition == &quot;UNDER AGE/WEIGHT&quot;, &quot;UNDERAGE/WEIGHT&quot;, shelterClean$Intake.Condition)</code></pre>
+<pre class="r"><code>#Modify Intake.Type
+#mean(shelter$Intake.Type == &quot;STRAY&quot;)
+#mean(shelter$Intake.Type == &quot;WILDLIFE&quot;)
+shelterClean$Intake.Type &lt;- ifelse(shelterClean$Intake.Type== &quot;STRAY&quot;, &quot;STRAY&quot;, &quot;Other&quot;)
+shelterClean$Intake.Type &lt;- ifelse(shelter$Intake.Type == &quot;WILDLIFE&quot;, &quot;WILDLIFE&quot;, shelterClean$Intake.Type)</code></pre>
+<pre class="r"><code>#Modify Sex
+#mean(shelter$Sex == &quot;Unknown&quot;)
+shelterClean$Sex &lt;- ifelse(shelterClean$Sex== &quot;Spayed&quot;, &quot;Spayed/Neutered&quot;, shelterClean$Sex)
+shelterClean$Sex &lt;- ifelse(shelterClean$Sex == &quot;Neutered&quot;, &quot;Spayed/Neutered&quot;, shelterClean$Sex)</code></pre>
+<pre class="r"><code>#Modify Intake.SubType
+# mean(shelter$Intake.Subtype == &quot;FIELD&quot;)
+# mean(shelter$Intake.Subtype == &quot;OTC&quot;)
+shelterClean$Intake.Subtype &lt;- ifelse(shelterClean$Intake.Subtype== &quot;FIELD&quot;, &quot;FIELD&quot;, &quot;Other&quot;)
+shelterClean$Intake.Subtype &lt;- ifelse(shelter$Intake.Subtype == &quot;OTC&quot;, &quot;OTC&quot;, shelterClean$Intake.Subtype)</code></pre>
+<pre class="r"><code># Check Condition after cleaning
+shelterClean &lt;- shelterClean %&gt;% 
+  mutate_if(is.character, as.factor)
+
+#shelterClean$Age &lt;- as.integer(shelterClean$Age)
+#shelterClean$IntakeYear &lt;- as.integer(shelterClean$IntakeYear)
+#shelterClean$OutcomeYear &lt;- as.integer(shelterClean$OutcomeYear)
+#shelterClean$stayTime &lt;- as.integer(shelterClean$stayTime)
+
+#nlevels(shelterClean$Animal.Type)
+#nlevels(shelterClean$PrimaryColor)
+#nlevels(shelterClean$PrimaryPattern)
+#nlevels(shelterClean$SecondaryColor)
+#nlevels(shelterClean$SecondaryPattern)
+#nlevels(shelterClean$Sex)
+#nlevels(shelterClean$Intake.Condition)
+#nlevels(shelterClean$Intake.Subtype)
+#nlevels(shelterClean$Intake.Type)
+#nlevels(shelterClean$Jurisdiction)
+#nlevels(shelterClean$Outcome.Type)</code></pre>
+<pre class="r"><code>#Check missing data
+shelterClean %&gt;%
+  #select(Age, stayTime) %&gt;%
+vis_dat()</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>#Remove missing data
+#shelterClean &lt;- shelterClean[!is.na(shelterClean$stayTime),]
+shelterClean &lt;- na.omit(shelterClean)
+shelterClean$Jurisdiction &lt;- ifelse(shelterClean$Jurisdiction == &quot;LongBeach&quot;, 1, 0)</code></pre>
+</div>
+<div id="part-2-dag" class="section level1">
+<h1>Part 2: DAG</h1>
+<pre class="r"><code>#Identify factors
+Jurisdiction ~ Intake.Type + Age + Sex + Animal.Type</code></pre>
+<pre><code>## Jurisdiction ~ Intake.Type + Age + Sex + Animal.Type</code></pre>
+<pre class="r"><code>stayTime ~ Animal.Type + Sex + Age + Condition</code></pre>
+<pre><code>## stayTime ~ Animal.Type + Sex + Age + Condition</code></pre>
+<pre class="r"><code>Condition ~ Age + Animal.Type + Sex + Appearance + Intake.Condition + Intake.Type + Intake.Subtype + IntakeYear  + Outcome.Subtype + OutcomeYear</code></pre>
+<pre><code>## Condition ~ Age + Animal.Type + Sex + Appearance + Intake.Condition + 
+##     Intake.Type + Intake.Subtype + IntakeYear + Outcome.Subtype + 
+##     OutcomeYear</code></pre>
+<pre class="r"><code>Appearance ~ Animal.Type + Sex + Age + PriColor + PriPattern + SecondaryColor + SecondaryPattern</code></pre>
+<pre><code>## Appearance ~ Animal.Type + Sex + Age + PriColor + PriPattern + 
+##     SecondaryColor + SecondaryPattern</code></pre>
+<pre class="r"><code>#Create Causal Diagram
+dagify(
+  
+  Jurisdiction ~ Intake.Type + Age + Sex + Animal.Type + Appearance,
+  Appearance ~ Animal.Type + Sex + Age + PriColor + PriPattern + SecondaryColor + SecondaryPattern,
+  stayTime ~ Animal.Type + Sex + Age + Condition,
+  Condition ~ Age + Animal.Type + Sex + Intake.Condition + Intake.Type + Intake.Subtype + IntakeYear + IntakeReason + OutcomeYear + OutAlive,
+  
+  exposure = &quot;Jurisdiction&quot;,
+  outcome = &quot;stayTime&quot;
+) %&gt;%
+  ggdag(text_col = &quot;CornFlower Blue&quot;, layout = &quot;kk&quot;) +
+  theme_dag_grey() </code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre class="r"><code>#Check Confounding Path &amp; Adjustment
+dagify(
+  
+    
+  Jurisdiction ~  Intake.Type + Age + Sex + Animal.Type + Appearance,
+  Appearance ~ Animal.Type + Sex + Age + PriColor + PriPattern + SecondaryColor + SecondaryPattern,
+  stayTime ~ Animal.Type + Sex + Age + Condition,
+  Condition ~ Age + Animal.Type + Sex + Intake.Condition + Intake.Type + Intake.Subtype + IntakeYear + IntakeReason + OutcomeYear + outAlive,
+  
+  
+  exposure = &quot;Jurisdiction&quot;,
+  outcome = &quot;stayTime&quot;,
+
+  latent = c(&quot;Appearance&quot;, &quot;Condition&quot;)
+) %&gt;%
+  ggdag_adjustment_set(text_col = &quot;Dark Green&quot;, text_size = 2)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="part-3-a-propensity-score-model" class="section level1">
+<h1>Part 3: A propensity score model</h1>
+<pre class="r"><code>#Fit propensity score model
+shelterClean &lt;- 
+  glm(Jurisdiction ~ Intake.Type + Age + Sex + Animal.Type,
+      data = shelterClean,
+      family = binomial()) %&gt;%
+  
+  augment(type.predict = &quot;response&quot;,
+          data = shelterClean)
+
+shelterClean %&gt;%
+  select(Jurisdiction, .fitted)</code></pre>
+<pre><code>## # A tibble: 26,404 × 2
+##    Jurisdiction .fitted
+##           &lt;dbl&gt;   &lt;dbl&gt;
+##  1            1   0.845
+##  2            1   0.882
+##  3            1   0.861
+##  4            1   0.865
+##  5            1   0.885
+##  6            1   0.879
+##  7            1   0.836
+##  8            1   0.849
+##  9            0   0.849
+## 10            1   0.884
+## # … with 26,394 more rows</code></pre>
+<pre class="r"><code>#Examine the distribution of propensity score between the two groups
+df_plot &lt;- shelterClean %&gt;%
+  tidyr::pivot_wider(names_from = Jurisdiction,
+                     values_from = .fitted,
+                     names_prefix = &quot;Jurisdiction_&quot;)</code></pre>
+<pre class="r"><code>library(ggplot2)</code></pre>
+<pre class="r"><code>ggplot(df_plot) +
+  geom_histogram(bins = 150,
+                 aes(x = Jurisdiction_1),
+                 fill = &quot;cornflower blue&quot;) +
+  geom_histogram(bins = 150,
+                 aes(x = Jurisdiction_0,
+                     y = -stat(count)),
+                 fill = &quot;orange&quot;) +
+  scale_y_continuous(&quot;count&quot;, label = abs) +
+  scale_x_continuous(&quot;propensity score&quot;) +
+  annotate(geom = &quot;label&quot;,
+           x = 0.7,
+           y = 200,
+           label = &quot;Jurisdiction in LongBeach&quot; 
+           ) + 
+  
+  annotate(geom = &quot;label&quot;,
+           x = 0.7,
+           y = -200,
+           label = &quot;Jurisdiction in Other Area&quot;
+           ) + 
+  theme_minimal()</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre class="r"><code>#Unweighted table for exposure groups
+svy_des &lt;- svydesign(
+  ids = ~1,
+  data = shelterClean
+  )
+
+svy_des %&gt;%
+  tbl_svysummary(
+    by = Jurisdiction,
+    include = c(&quot;Intake.Type&quot;,
+                &quot;Age&quot;,
+                &quot;Sex&quot;,
+                &quot;Animal.Type&quot;
+                )
+    ) %&gt;%
+  add_overall()</code></pre>
+<div id="sgezlebvez" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#sgezlebvez .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#sgezlebvez .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#sgezlebvez .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#sgezlebvez .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#sgezlebvez .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#sgezlebvez .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#sgezlebvez .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#sgezlebvez .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sgezlebvez .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sgezlebvez .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#sgezlebvez .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#sgezlebvez .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#sgezlebvez .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sgezlebvez .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#sgezlebvez .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#sgezlebvez .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sgezlebvez .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#sgezlebvez .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sgezlebvez .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#sgezlebvez .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sgezlebvez .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sgezlebvez .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sgezlebvez .gt_left {
+  text-align: left;
+}
+
+#sgezlebvez .gt_center {
+  text-align: center;
+}
+
+#sgezlebvez .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#sgezlebvez .gt_font_normal {
+  font-weight: normal;
+}
+
+#sgezlebvez .gt_font_bold {
+  font-weight: bold;
+}
+
+#sgezlebvez .gt_font_italic {
+  font-style: italic;
+}
+
+#sgezlebvez .gt_super {
+  font-size: 65%;
+}
+
+#sgezlebvez .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#sgezlebvez .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#sgezlebvez .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#sgezlebvez .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#sgezlebvez .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 26,404<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>0</strong>, N = 3,675<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>1</strong>, N = 22,729<sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Intake.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">4,060 (15%)</td>
+<td class="gt_row gt_center">598 (16%)</td>
+<td class="gt_row gt_center">3,462 (15%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">STRAY</td>
+<td class="gt_row gt_center">20,094 (76%)</td>
+<td class="gt_row gt_center">2,714 (74%)</td>
+<td class="gt_row gt_center">17,380 (76%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">WILDLIFE</td>
+<td class="gt_row gt_center">2,250 (8.5%)</td>
+<td class="gt_row gt_center">363 (9.9%)</td>
+<td class="gt_row gt_center">1,887 (8.3%)</td></tr>
+    <tr><td class="gt_row gt_left">Age</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (2.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td></tr>
+    <tr><td class="gt_row gt_left">Sex</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Female</td>
+<td class="gt_row gt_center">6,422 (24%)</td>
+<td class="gt_row gt_center">838 (23%)</td>
+<td class="gt_row gt_center">5,584 (25%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Male</td>
+<td class="gt_row gt_center">6,901 (26%)</td>
+<td class="gt_row gt_center">911 (25%)</td>
+<td class="gt_row gt_center">5,990 (26%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Spayed/Neutered</td>
+<td class="gt_row gt_center">8,869 (34%)</td>
+<td class="gt_row gt_center">1,320 (36%)</td>
+<td class="gt_row gt_center">7,549 (33%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">4,212 (16%)</td>
+<td class="gt_row gt_center">606 (16%)</td>
+<td class="gt_row gt_center">3,606 (16%)</td></tr>
+    <tr><td class="gt_row gt_left">Animal.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">CAT</td>
+<td class="gt_row gt_center">13,685 (52%)</td>
+<td class="gt_row gt_center">1,957 (53%)</td>
+<td class="gt_row gt_center">11,728 (52%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">DOG</td>
+<td class="gt_row gt_center">9,545 (36%)</td>
+<td class="gt_row gt_center">1,187 (32%)</td>
+<td class="gt_row gt_center">8,358 (37%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">3,174 (12%)</td>
+<td class="gt_row gt_center">531 (14%)</td>
+<td class="gt_row gt_center">2,643 (12%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> n (%); Median (IQR)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+<div id="part-4-average-treatment-effectato" class="section level1">
+<h1>Part 4: Average Treatment Effect(ATO)</h1>
+<pre class="r"><code>#Calculate ATO
+shelterClean &lt;- shelterClean %&gt;%
+  mutate(w_ato = (1-.fitted)*Jurisdiction + .fitted*(1-Jurisdiction))</code></pre>
+<pre class="r"><code>#Weighted Distribution Plot
+ggplot(df_plot) +
+  geom_histogram(bins = 150,
+                 alpha = 0.5,
+                 aes(x = Jurisdiction_1),
+                 fill = &quot;cornflower blue&quot;) +
+  geom_histogram(bins = 150,
+                 aes(x = Jurisdiction_1,
+                     weight = shelterClean$w_ato),
+                 fill = &quot;cornflower blue&quot;) +
+  
+  geom_histogram(bins = 150,
+                 alpha = 0.5,
+                 aes(x = Jurisdiction_0,
+                     y = -stat(count)),
+                 fill = &quot;orange&quot;) +
+   geom_histogram(bins = 150,
+                 aes(x = Jurisdiction_0,
+                     y = -stat(count),
+                     weight = shelterClean$w_ato),
+                 fill = &quot;orange&quot;) +
+  
+  annotate(geom = &quot;label&quot;,
+           x = 0.7,
+           y = 200,
+           label = &quot;Jurisdiction in LongBeach&quot; 
+           ) + 
+  
+  annotate(geom = &quot;label&quot;,
+           x = 0.7,
+           y = -200,
+           label = &quot;Jurisdiction in Other Area&quot;
+           ) + 
+  theme_minimal()</code></pre>
+<pre><code>## Warning: Removed 3675 rows containing non-finite values (stat_bin).
+## Removed 3675 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## Warning: Removed 22729 rows containing non-finite values (stat_bin).
+## Removed 22729 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<pre class="r"><code>#Weighted table
+svy_des &lt;- svydesign(
+  ids = ~1,
+  data = shelterClean,
+  weights = ~ w_ato
+  )
+
+svy_des %&gt;%
+  tbl_svysummary(
+    by = Jurisdiction,
+    include = c(&quot;Intake.Type&quot;,
+                &quot;Age&quot;,
+                &quot;Sex&quot;,
+                &quot;Animal.Type&quot;
+                )
+    ) %&gt;%
+  add_overall()</code></pre>
+<div id="fuzrbczajm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#fuzrbczajm .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fuzrbczajm .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fuzrbczajm .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#fuzrbczajm .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#fuzrbczajm .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#fuzrbczajm .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#fuzrbczajm .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#fuzrbczajm .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fuzrbczajm .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fuzrbczajm .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#fuzrbczajm .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#fuzrbczajm .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#fuzrbczajm .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fuzrbczajm .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#fuzrbczajm .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#fuzrbczajm .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fuzrbczajm .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#fuzrbczajm .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fuzrbczajm .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#fuzrbczajm .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fuzrbczajm .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fuzrbczajm .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fuzrbczajm .gt_left {
+  text-align: left;
+}
+
+#fuzrbczajm .gt_center {
+  text-align: center;
+}
+
+#fuzrbczajm .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#fuzrbczajm .gt_font_normal {
+  font-weight: normal;
+}
+
+#fuzrbczajm .gt_font_bold {
+  font-weight: bold;
+}
+
+#fuzrbczajm .gt_font_italic {
+  font-style: italic;
+}
+
+#fuzrbczajm .gt_super {
+  font-size: 65%;
+}
+
+#fuzrbczajm .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#fuzrbczajm .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#fuzrbczajm .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#fuzrbczajm .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#fuzrbczajm .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 6,308<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>0</strong>, N = 3,154<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>1</strong>, N = 3,154<sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Intake.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">1,013 (16%)</td>
+<td class="gt_row gt_center">506 (16%)</td>
+<td class="gt_row gt_center">506 (16%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">STRAY</td>
+<td class="gt_row gt_center">4,686 (74%)</td>
+<td class="gt_row gt_center">2,343 (74%)</td>
+<td class="gt_row gt_center">2,343 (74%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">WILDLIFE</td>
+<td class="gt_row gt_center">609 (9.6%)</td>
+<td class="gt_row gt_center">304 (9.6%)</td>
+<td class="gt_row gt_center">304 (9.6%)</td></tr>
+    <tr><td class="gt_row gt_left">Age</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (2.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td></tr>
+    <tr><td class="gt_row gt_left">Sex</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Female</td>
+<td class="gt_row gt_center">1,455 (23%)</td>
+<td class="gt_row gt_center">728 (23%)</td>
+<td class="gt_row gt_center">728 (23%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Male</td>
+<td class="gt_row gt_center">1,578 (25%)</td>
+<td class="gt_row gt_center">789 (25%)</td>
+<td class="gt_row gt_center">789 (25%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Spayed/Neutered</td>
+<td class="gt_row gt_center">2,239 (35%)</td>
+<td class="gt_row gt_center">1,120 (35%)</td>
+<td class="gt_row gt_center">1,120 (35%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">1,036 (16%)</td>
+<td class="gt_row gt_center">518 (16%)</td>
+<td class="gt_row gt_center">518 (16%)</td></tr>
+    <tr><td class="gt_row gt_left">Animal.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">CAT</td>
+<td class="gt_row gt_center">3,350 (53%)</td>
+<td class="gt_row gt_center">1,675 (53%)</td>
+<td class="gt_row gt_center">1,675 (53%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">DOG</td>
+<td class="gt_row gt_center">2,076 (33%)</td>
+<td class="gt_row gt_center">1,038 (33%)</td>
+<td class="gt_row gt_center">1,038 (33%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">882 (14%)</td>
+<td class="gt_row gt_center">441 (14%)</td>
+<td class="gt_row gt_center">441 (14%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> n (%); Median (IQR)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+<div id="part-5-evaluate-propensity-score-model" class="section level1">
+<h1>Part 5: Evaluate propensity score model</h1>
+<div id="smd-and-love-plot" class="section level2">
+<h2>5.1. SMD and Love Plot</h2>
+<pre class="r"><code>#Calculate SMDs
+
+smds &lt;- shelterClean %&gt;%
+  summarize(
+    across(
+      c(Age,Sex, Intake.Condition, Intake.Type, Intake.Subtype, Animal.Type, OutcomeYear, was_outcome_alive, SecondaryColor, SecondaryPattern, PrimaryColor, PrimaryPattern),
+      list(
+        unweighted = ~smd(.x, Jurisdiction)$estimate,
+        ato.weighted = ~smd(.x, Jurisdiction, w_ato)$estimate
+        )
+      )
+  )</code></pre>
+<pre class="r"><code>#Pivot SMDs
+plot_df &lt;- smds %&gt;%
+  pivot_longer(
+    everything(),
+    values_to = &quot;SMD&quot;,
+    names_to = c(&quot;variable&quot;, &quot;Method&quot;),
+    names_pattern = &quot;(.*)_(.*)&quot;
+  ) %&gt;%
+  arrange(desc(Method), abs(SMD)) %&gt;%
+  mutate(variable = fct_inorder(variable))</code></pre>
+<pre class="r"><code>#Create Love Plots
+ggplot(
+  data = plot_df,
+  aes(x = abs(SMD), y = variable, group = Method, color = Method)) +
+  geom_line(orientation = &quot;y&quot;) +
+  geom_point() +
+  geom_vline(xintercept = 0.1,
+             lty = 2)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+</div>
+<div id="refit-the-propensity-score-model" class="section level2">
+<h2>5.2. Refit the Propensity Score Model</h2>
+<pre class="r"><code>#Fit propensity score model
+shelterClean &lt;- 
+  glm(Jurisdiction ~ Intake.Type + Age + Sex + Animal.Type + Intake.Condition + OutcomeYear + was_outcome_alive + Intake.Subtype,
+      data = shelterClean,
+      family = binomial()) %&gt;%
+  
+  augment(type.predict = &quot;response&quot;,
+          data = shelterClean)
+
+shelterClean %&gt;%
+  select(Jurisdiction, .fitted)</code></pre>
+<pre><code>## # A tibble: 26,404 × 2
+##    Jurisdiction .fitted
+##           &lt;dbl&gt;   &lt;dbl&gt;
+##  1            1   0.799
+##  2            1   0.882
+##  3            1   0.866
+##  4            1   0.857
+##  5            1   0.885
+##  6            1   0.890
+##  7            1   0.859
+##  8            1   0.844
+##  9            0   0.844
+## 10            1   0.898
+## # … with 26,394 more rows</code></pre>
+<pre class="r"><code>#Calculate ATO
+shelterClean &lt;- shelterClean %&gt;%
+  mutate(w_ato = (1-.fitted)*Jurisdiction + .fitted*(1-Jurisdiction))</code></pre>
+<pre class="r"><code>#Weighted Distribution Plot
+ggplot(df_plot) +
+  geom_histogram(bins = 150,
+                 alpha = 0.5,
+                 aes(x = Jurisdiction_1),
+                 fill = &quot;cornflower blue&quot;) +
+  geom_histogram(bins = 150,
+                 aes(x = Jurisdiction_1,
+                     weight = shelterClean$w_ato),
+                 fill = &quot;cornflower blue&quot;) +
+  
+  geom_histogram(bins = 150,
+                 alpha = 0.5,
+                 aes(x = Jurisdiction_0,
+                     y = -stat(count)),
+                 fill = &quot;orange&quot;) +
+   geom_histogram(bins = 150,
+                 aes(x = Jurisdiction_0,
+                     y = -stat(count),
+                     weight = shelterClean$w_ato),
+                 fill = &quot;orange&quot;) +
+  
+  annotate(geom = &quot;label&quot;,
+           x = 0.7,
+           y = 200,
+           label = &quot;Jurisdiction in LongBeach&quot; 
+           ) + 
+  
+  annotate(geom = &quot;label&quot;,
+           x = 0.7,
+           y = -200,
+           label = &quot;Jurisdiction in Other Area&quot;
+           ) + 
+  theme_minimal()</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<pre class="r"><code>#Calculate SMDs
+
+smds &lt;- shelterClean %&gt;%
+  summarize(
+    across(
+      c(Age,Sex, Intake.Condition, Intake.Type, Intake.Subtype, Animal.Type, OutcomeYear, was_outcome_alive, SecondaryColor, SecondaryPattern, PrimaryColor, PrimaryPattern),
+      list(
+        unweighted = ~smd(.x, Jurisdiction)$estimate,
+        ato.weighted = ~smd(.x, Jurisdiction, w_ato)$estimate
+        )
+      )
+  )</code></pre>
+<pre class="r"><code>#Pivot SMDs
+plot_df &lt;- smds %&gt;%
+  pivot_longer(
+    everything(),
+    values_to = &quot;SMD&quot;,
+    names_to = c(&quot;variable&quot;, &quot;Method&quot;),
+    names_pattern = &quot;(.*)_(.*)&quot;
+  ) %&gt;%
+  arrange(desc(Method), abs(SMD)) %&gt;%
+  mutate(variable = fct_inorder(variable))</code></pre>
+<pre class="r"><code>#Create Love Plots
+ggplot(
+  data = plot_df,
+  aes(x = abs(SMD), y = variable, group = Method, color = Method)) +
+  geom_line(orientation = &quot;y&quot;) +
+  geom_point() +
+  geom_vline(xintercept = 0.1,
+             lty = 2)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+</div>
+<div id="empirical-cdf-plot" class="section level2">
+<h2>5.3. Empirical CDF Plot</h2>
+<pre class="r"><code>#Unweighted eCDF
+#age
+par(mfrow = c(1,3))
+ggplot(shelterClean,
+       aes(x = Age, group = Jurisdiction,
+       color = factor(Jurisdiction))) +
+  stat_ecdf() +
+  scale_color_manual(&quot;Take In LongBeach&quot;,
+                     values = c(&quot;orange&quot;,&quot;dark green&quot;),
+                     labels = c(&quot;No&quot;,&quot;Yes&quot;)
+  ) + 
+  ylab(&quot;Proportion &lt;=x&quot;)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<pre class="r"><code>#IntakeYear
+ ggplot(shelterClean,
+       aes(x = IntakeYear, group = Jurisdiction,
+       color = factor(Jurisdiction))) +
+  stat_ecdf() +
+  scale_color_manual(&quot;Take In LongBeach&quot;,
+                     values = c(&quot;orange&quot;,&quot;dark green&quot;),
+                     labels = c(&quot;No&quot;,&quot;Yes&quot;)
+  ) + 
+  ylab(&quot;Proportion &lt;=x&quot;) </code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-40-2.png" width="672" /></p>
+<pre class="r"><code> #OutcomeYear
+ ggplot(shelterClean,
+       aes(x = OutcomeYear, group = Jurisdiction,
+       color = factor(Jurisdiction))) +
+  stat_ecdf() +
+  scale_color_manual(&quot;Take In LongBeach&quot;,
+                     values = c(&quot;orange&quot;,&quot;dark green&quot;),
+                     labels = c(&quot;No&quot;,&quot;Yes&quot;)
+  ) + 
+  ylab(&quot;Proportion &lt;=x&quot;)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-40-3.png" width="672" /></p>
+<pre class="r"><code>#Weighted eCDFs
+#age
+par(mfrow = c(1,3))
+ecdf_1 &lt;- shelterClean %&gt;%
+  filter(Jurisdiction == 1) %&gt;%
+  arrange(Age) %&gt;% #from small to large value
+  mutate(cum_pct_ato = cumsum(w_ato) / sum(w_ato))
+
+ecdf_0 &lt;- shelterClean %&gt;%
+  filter(Jurisdiction == 0) %&gt;%
+  arrange(Age) %&gt;%
+  mutate(cum_pct_ato = cumsum(w_ato) / sum(w_ato))
+
+ggplot(ecdf_1, aes(x = Age, y = cum_pct_ato)) +
+  geom_line(color = &quot;dark green&quot;) +
+  geom_line(data = ecdf_0,
+            aes(x = Age, y = cum_pct_ato),
+            color = &quot;orange&quot;) +
+  ylab(&quot;Proportion &lt;=x&quot;)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<pre class="r"><code>#IntakeYear
+ecdf_1 &lt;- shelterClean %&gt;%
+  filter(Jurisdiction == 1) %&gt;%
+  arrange(IntakeYear) %&gt;% #from small to large value
+  mutate(cum_pct_ato = cumsum(w_ato) / sum(w_ato))
+
+ecdf_0 &lt;- shelterClean %&gt;%
+  filter(Jurisdiction == 0) %&gt;%
+  arrange(IntakeYear) %&gt;%
+  mutate(cum_pct_ato = cumsum(w_ato) / sum(w_ato))
+
+ggplot(ecdf_1, aes(x = IntakeYear, y = cum_pct_ato)) +
+  geom_line(color = &quot;dark green&quot;) +
+  geom_line(data = ecdf_0,
+            aes(x = IntakeYear, y = cum_pct_ato),
+            color = &quot;orange&quot;) +
+  ylab(&quot;Proportion &lt;=x&quot;)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-41-2.png" width="672" /></p>
+<pre class="r"><code>#OutcomeYear
+ecdf_1 &lt;- shelterClean %&gt;%
+  filter(Jurisdiction == 1) %&gt;%
+  arrange(OutcomeYear) %&gt;% #from small to large value
+  mutate(cum_pct_ato = cumsum(w_ato) / sum(w_ato))
+
+ecdf_0 &lt;- shelterClean %&gt;%
+  filter(Jurisdiction == 0) %&gt;%
+  arrange(OutcomeYear) %&gt;%
+  mutate(cum_pct_ato = cumsum(w_ato) / sum(w_ato))
+
+ggplot(ecdf_1, aes(x = OutcomeYear, y = cum_pct_ato)) +
+  geom_line(color = &quot;dark green&quot;) +
+  geom_line(data = ecdf_0,
+            aes(x = OutcomeYear, y = cum_pct_ato),
+            color = &quot;orange&quot;) +
+  ylab(&quot;Proportion &lt;=x&quot;)</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-41-3.png" width="672" /></p>
+</div>
+</div>
+<div id="part-6-outcome-model" class="section level1">
+<h1>Part 6: Outcome Model</h1>
+<pre class="r"><code>suppressMessages(library(rsample))
+suppressMessages(library(PSW))</code></pre>
+<pre class="r"><code>#Estimate average causal effect with uncertainty by bootstrap
+
+fit_ipw &lt;- function(splits, ...) { #split is the orginal dataframe
+  .df &lt;- analysis(splits) #pull out the split into new dataframe
+  
+  propensity_model &lt;- glm(Jurisdiction ~ Intake.Type + Age + Sex + Animal.Type + Intake.Condition + OutcomeYear + was_outcome_alive + Intake.Subtype,
+      data = .df,
+      family = binomial())
+  
+  .df &lt;- propensity_model %&gt;%
+    augment(type.predict = &quot;response&quot;, data=.df) %&gt;%
+    mutate(ato = (1 -.fitted) * Jurisdiction + .fitted * (1 - Jurisdiction))
+  
+  lm(stayTime ~ Jurisdiction, data = .df, weights = ato) %&gt;%
+    tidy()
+}</code></pre>
+<pre class="r"><code>ipw_results &lt;- bootstraps(shelterClean, 1000, apparent = TRUE) %&gt;%
+  mutate(results = map(splits, fit_ipw))</code></pre>
+<pre class="r"><code>estimate &lt;- int_t(ipw_results, results) %&gt;%
+  filter(term==&quot;Jurisdiction&quot;)
+estimate</code></pre>
+<pre><code>## # A tibble: 1 × 6
+##   term         .lower .estimate .upper .alpha .method  
+##   &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;    
+## 1 Jurisdiction  -5.01     -3.37  -1.82   0.05 student-t</code></pre>
+</div>
+<div id="part-7-sensitivity-analysis" class="section level1">
+<h1>Part 7: Sensitivity Analysis</h1>
+<pre class="r"><code>#Check missing data
+shelter &lt;- read.csv(&quot;shelter.csv&quot;)
+shelter %&gt;%
+  select(Age, DOB, Outcome.Date, Intake.Type, Sex, Animal.Type, Intake.Condition, was_outcome_alive, Intake.Subtype, Jurisdiction) %&gt;%
+vis_dat()</code></pre>
+<p><img src="Code_appendix_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<pre class="r"><code>shelter$Jurisdiction &lt;- ifelse(shelter$Jurisdiction == &quot;LONG BEACH&quot;, &quot;LongBeach&quot;, &quot;Others&quot;)
+shelter %&gt;%
+  tbl_summary(
+    by = Jurisdiction,
+    include = c(&quot;Age&quot;)
+    ) %&gt;%
+  add_overall()</code></pre>
+<div id="vuhujkdxsp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#vuhujkdxsp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vuhujkdxsp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vuhujkdxsp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vuhujkdxsp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vuhujkdxsp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vuhujkdxsp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vuhujkdxsp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vuhujkdxsp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vuhujkdxsp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vuhujkdxsp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vuhujkdxsp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vuhujkdxsp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vuhujkdxsp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vuhujkdxsp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vuhujkdxsp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vuhujkdxsp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vuhujkdxsp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vuhujkdxsp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vuhujkdxsp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vuhujkdxsp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vuhujkdxsp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vuhujkdxsp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vuhujkdxsp .gt_left {
+  text-align: left;
+}
+
+#vuhujkdxsp .gt_center {
+  text-align: center;
+}
+
+#vuhujkdxsp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vuhujkdxsp .gt_font_normal {
+  font-weight: normal;
+}
+
+#vuhujkdxsp .gt_font_bold {
+  font-weight: bold;
+}
+
+#vuhujkdxsp .gt_font_italic {
+  font-style: italic;
+}
+
+#vuhujkdxsp .gt_super {
+  font-size: 65%;
+}
+
+#vuhujkdxsp .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#vuhujkdxsp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vuhujkdxsp .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#vuhujkdxsp .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#vuhujkdxsp .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 30,536<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>LongBeach</strong>, N = 25,982<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Others</strong>, N = 4,554<sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Age</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (2.0, 6.0)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">3,774</td>
+<td class="gt_row gt_center">2,930</td>
+<td class="gt_row gt_center">844</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> Median (IQR)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+<pre class="r"><code>#2930/25982
+#844/4554</code></pre>
+<pre class="r"><code>suppressMessages(library(tipr))
+
+#smd &lt;- seq(0.1,2, by = 0.1)
+adjust_coef_with_binary(effect = c(-5.00, -3.39, -1.89),
+            exposed_p = 0.11,
+            unexposed_p = 0.185,
+            outcome_association = 2, 
+            verbose = FALSE)</code></pre>
+<pre><code>## # A tibble: 3 × 5
+##   effect_adjusted effect_observed exposed_p unexposed_p outcome_association
+##             &lt;dbl&gt;           &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;               &lt;dbl&gt;
+## 1           -4.75           -5         0.11       0.185                   2
+## 2           -3.14           -3.39      0.11       0.185                   2
+## 3           -1.64           -1.89      0.11       0.185                   2</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

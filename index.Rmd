@@ -1,0 +1,19 @@
+---
+title: "Home Page"
+---
+
+## This is website is used for STA379-A Causal Inference's Final Project
+
+  * This project handles a animal shelter data set which records animals intake and outcome information in the Long Beach Animal Shelter.
+  
+  * Here are the reference of my data set and other information I used to explain the idea of causal inference in my project:
+  
+  * (2022). Animal Shelter Data [Dataset]. <i> https://data.longbeach.gov/explore/dataset/animal-shelter-intakes-and-outcomes/</i>
+  
+  * Manuscript of "Sensitivity to Unmeasured Confounding" on Canvas. <i> https://wakeforest.instructure.com/courses/40782/files/2429782?module_item_id=742276 </i>
+  
+## Reason for Exploring this topic  
+
+  * Just want to share my little cat!
+
+<img src = "img/IMG_6036.JPG" height="306px" width="408px" />

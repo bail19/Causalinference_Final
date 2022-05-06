@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Irene Bai" />
+
+
+<title>Causal Analysis on Animal Shelter Data</title>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Irene's World of Causal Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="final.html">Posts of Casual Analysis</a>
+</li>
+<li>
+  <a href="Code_appendix.html">Code-Appendix</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/bail19">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Causal Analysis on Animal Shelter Data</h1>
+<h4 class="author">Irene Bai</h4>
+<h4 class="date">4/23/2022</h4>
+
+</div>
+
+
+<div id="part-1-overview" class="section level1">
+<h1>Part 1: Overview</h1>
+<div id="introduction" class="section level2">
+<h2>1.1. Introduction</h2>
+<p>In almost every statistics classes, no matter if it is a introductory level one or a professional level one, one of the most important topics is building an appropriate model to fit a chosen data set. There are lots of ways to achieve this goal. For instance, in STAT 112, a LSLR model is introduced to fit a data set with linear regression. Even though it is a simple and easy-to-use tool, it is likely to cause misleading results and one of these problems is caused by confounders. By saying confounders, we are talking about features that are related with both our exposure variable(X) and response variable(Y). Thus, by not considering them in advance, we would get significant relationship between the exposure variable and response variable simply under the effects of confounders. Therefore, it is worth considering this problem and these posts are meant to tell a way to avoid confounders’ effects when building the model and a real life data set is given as an example.</p>
+</div>
+<div id="data-preprocessing" class="section level2">
+<h2>1.2. Data Preprocessing</h2>
+<p>In this example, we are going to use a data set about an animal shelter’s animals’ intake and outcome records in Long Beach, California. The question we are trying to solve is whether if animals taken under the jurisdiction of Long Beach stay longer in shelters than those under the jurisdiction of other area. In this case, we are trying to find a relationship between the length of animals stay in the shelter and whether if they are under the control of Long Beach government when being taken into the shelter. It seems like a good place to fit with LSLR model but as we’ve said before, confounders need to be considered. Before we do any further analysis, we have to clean our data first.</p>
+<p>This data set originally includes 30536 observations and 21 variables. While it also includes many unique variables including animals’ names, their IDs, locations, reasons to be taken etc. which we don’t consider as influential to our model. Thus we eliminated 7 variables from our data set. Moreover, we have to calculate our response variables personally since the records only provided the intake data and outcome data of animals. After calculating the length of stay by days, we delete the records of specific months and days and now we have 12 variables. In these variables, four of them are numerical including age, stayTime, intakeYear and outcomeYear. For the remaining categorical variables, we need to modify it to make it eligible to be used in model fitting. We first need to check the missing data. Unfortunately, there are some missing data which are displayed in the first plot and it is common in real life data set. For this example, we simply delete all the observations with missing data since we have a relatively large data set. However, this may cause bias to our model fitting since we are not sure how much useful information is included in these deleted data. Thus, we would perform sensitivity analysis trying to capture the bias at the end of this example. For now, we are going to keep cleaning this data set. Another big problem of this data set is that its categorical variables have too much levels in it. Since most of the categorical variables have more than 10 categories, it may lead to small sample size in each categories and so it could not be used to in analysis since bias is then introduced with small categories. Thus, for most categorical variables, we keep the largest two levels and cluster all the other levels into a large “Other” category. While there is an exception, which is animal’s primary color and secondary color. For these two variables, we clustered them into light/dark colors and pure/tabby/point patterns to fit our model easily. After modifying it, we assured that each level includes at least 10% of the whole data set. Now we will start our causal analysis in next section.</p>
+<p><img src="final_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+</div>
+<div id="part-2-dag" class="section level1">
+<h1>Part 2: DAG</h1>
+<p>We start our causal analysis with the help of DAG, which is directed acyclic graph. To briefly explain it, DAG is a useful tool to visualize relationships between variables. In this plot, variables will be connected by arrows and an arrow indicates an assumed causal relationship between connected variables. So first, we have to create relationships between variables by ourselves. In this example, we assumed that the exposure variable, jurisdiction of an animal is related to animals type, age , sex and type of intake; we also assumed that the outcome variable, which is the length of stay time in the shelter may be affected by animals type, sex, age, and their health condition. Their health condition may further related to animals’ age, type, sex, appearance, intake condition, intake type/sub-type etc. In the following DAG, we are able to visualize these complicated relationships.</p>
+<p>Besides simply visualizing these relationships, we can also figure out confounders by “ggdag_adjustment_set” function in R. This function directly provides us a plot specifying variables that need to be adjusted when building our model, which can be considered as confounders. Thus, we don’t need to find out confounders by ourselves by looking through DAG plot. Through this adjustment plot, we recognize that we need to adjust sex, age, type of animal and type of intake for our exposure variable. By having the adjustment set, we could fit a model between these variables and our exposure feature and then perform further analysis to minimize the effect of these confounders, which is provided in next section.</p>
+<p><img src="final_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="final_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="part-3-a-propensity-score-model" class="section level1">
+<h1>Part 3: A propensity score model</h1>
+<p>To explore the effects of confounders, we first fit a propensity score model which estimates the fitted value of our exposure variable by features we considered as confounders. We then call these fitted values as propensity score. This process is similar to how we fit a LSLR model in STAT 112. The only difference is that in this model, we fit the exposure(X) variable with confounders instead of the outcome variable(Y) with exposure variables(X). However, the whole process is pretty similar.</p>
+<p>After getting the fitted value of our exposure variable, we want to visualize the distribution of this variable by mirrored plots. The reason why mirrored plots is applied here is that since our exposure variable is a binary categorical variable, these propensity scores are separated into these two categories and mirror plots help us better visualize this result. Here are the plots and table:</p>
+<p><img src="final_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<div id="kflpudortq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#kflpudortq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kflpudortq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kflpudortq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kflpudortq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kflpudortq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kflpudortq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kflpudortq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kflpudortq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kflpudortq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kflpudortq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kflpudortq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kflpudortq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kflpudortq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kflpudortq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kflpudortq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kflpudortq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kflpudortq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kflpudortq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kflpudortq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kflpudortq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kflpudortq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#kflpudortq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kflpudortq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kflpudortq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kflpudortq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kflpudortq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kflpudortq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kflpudortq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kflpudortq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kflpudortq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kflpudortq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kflpudortq .gt_left {
+  text-align: left;
+}
+
+#kflpudortq .gt_center {
+  text-align: center;
+}
+
+#kflpudortq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kflpudortq .gt_font_normal {
+  font-weight: normal;
+}
+
+#kflpudortq .gt_font_bold {
+  font-weight: bold;
+}
+
+#kflpudortq .gt_font_italic {
+  font-style: italic;
+}
+
+#kflpudortq .gt_super {
+  font-size: 65%;
+}
+
+#kflpudortq .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#kflpudortq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kflpudortq .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#kflpudortq .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#kflpudortq .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 26,404<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>0</strong>, N = 3,675<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>1</strong>, N = 22,729<sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Intake.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">4,060 (15%)</td>
+<td class="gt_row gt_center">598 (16%)</td>
+<td class="gt_row gt_center">3,462 (15%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">STRAY</td>
+<td class="gt_row gt_center">20,094 (76%)</td>
+<td class="gt_row gt_center">2,714 (74%)</td>
+<td class="gt_row gt_center">17,380 (76%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">WILDLIFE</td>
+<td class="gt_row gt_center">2,250 (8.5%)</td>
+<td class="gt_row gt_center">363 (9.9%)</td>
+<td class="gt_row gt_center">1,887 (8.3%)</td></tr>
+    <tr><td class="gt_row gt_left">Age</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (2.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td></tr>
+    <tr><td class="gt_row gt_left">Sex</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Female</td>
+<td class="gt_row gt_center">6,422 (24%)</td>
+<td class="gt_row gt_center">838 (23%)</td>
+<td class="gt_row gt_center">5,584 (25%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Male</td>
+<td class="gt_row gt_center">6,901 (26%)</td>
+<td class="gt_row gt_center">911 (25%)</td>
+<td class="gt_row gt_center">5,990 (26%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Spayed/Neutered</td>
+<td class="gt_row gt_center">8,869 (34%)</td>
+<td class="gt_row gt_center">1,320 (36%)</td>
+<td class="gt_row gt_center">7,549 (33%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">4,212 (16%)</td>
+<td class="gt_row gt_center">606 (16%)</td>
+<td class="gt_row gt_center">3,606 (16%)</td></tr>
+    <tr><td class="gt_row gt_left">Animal.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">CAT</td>
+<td class="gt_row gt_center">13,685 (52%)</td>
+<td class="gt_row gt_center">1,957 (53%)</td>
+<td class="gt_row gt_center">11,728 (52%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">DOG</td>
+<td class="gt_row gt_center">9,545 (36%)</td>
+<td class="gt_row gt_center">1,187 (32%)</td>
+<td class="gt_row gt_center">8,358 (37%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">3,174 (12%)</td>
+<td class="gt_row gt_center">531 (14%)</td>
+<td class="gt_row gt_center">2,643 (12%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> n (%); Median (IQR)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+<p>From both the mirrored histograms and the unweighted table, we find that population are not balanced between group of jurisdiction in long beach and group of jurisdiction in other area as there were more animals being classified as under the jurisdiction of Long Beach. This conclusion has been further verified by the unweighted table as the number of animals for each confounder differs between Long Beach group and other group.</p>
+<p>To fix this problem, we use the ATO weight which intends to estimate those animals which are possible to be either in Long Beach group or other group. Details are explained in the next section.</p>
+</div>
+<div id="part-4-average-treatment-effectato" class="section level1">
+<h1>Part 4: Average Treatment Effect(ATO)</h1>
+<p>ATO stands for average treatment effect among the overlap which intends to create a “pseudo” population data set that has equal variance for each group in the population. This means that individuals are likely to be in either groups and the weight to transform our original data into the desired population is the ATO weights, which is calculated as:</p>
+<p><span class="math inline">\(\omega_{ATO} = (1-e_i)X_i + e_i(1-Xi)\)</span></p>
+<p>Here the <span class="math inline">\(e_i\)</span> is our fitted value from the previously fitted confounders and exposure model and <span class="math inline">\(X_i\)</span> is our exposure variable apparently. With the ATO weights, we are able to create the weighted table and distribution plots of population in both groups. These table and plots are showed below:</p>
+<p><img src="final_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<div id="xzxqyqwksq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#xzxqyqwksq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#xzxqyqwksq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#xzxqyqwksq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#xzxqyqwksq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#xzxqyqwksq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#xzxqyqwksq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#xzxqyqwksq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#xzxqyqwksq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#xzxqyqwksq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#xzxqyqwksq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#xzxqyqwksq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#xzxqyqwksq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#xzxqyqwksq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xzxqyqwksq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#xzxqyqwksq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#xzxqyqwksq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xzxqyqwksq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#xzxqyqwksq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xzxqyqwksq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#xzxqyqwksq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xzxqyqwksq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xzxqyqwksq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xzxqyqwksq .gt_left {
+  text-align: left;
+}
+
+#xzxqyqwksq .gt_center {
+  text-align: center;
+}
+
+#xzxqyqwksq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#xzxqyqwksq .gt_font_normal {
+  font-weight: normal;
+}
+
+#xzxqyqwksq .gt_font_bold {
+  font-weight: bold;
+}
+
+#xzxqyqwksq .gt_font_italic {
+  font-style: italic;
+}
+
+#xzxqyqwksq .gt_super {
+  font-size: 65%;
+}
+
+#xzxqyqwksq .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#xzxqyqwksq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#xzxqyqwksq .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#xzxqyqwksq .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#xzxqyqwksq .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 6,308<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>0</strong>, N = 3,154<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>1</strong>, N = 3,154<sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Intake.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">1,013 (16%)</td>
+<td class="gt_row gt_center">506 (16%)</td>
+<td class="gt_row gt_center">506 (16%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">STRAY</td>
+<td class="gt_row gt_center">4,686 (74%)</td>
+<td class="gt_row gt_center">2,343 (74%)</td>
+<td class="gt_row gt_center">2,343 (74%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">WILDLIFE</td>
+<td class="gt_row gt_center">609 (9.6%)</td>
+<td class="gt_row gt_center">304 (9.6%)</td>
+<td class="gt_row gt_center">304 (9.6%)</td></tr>
+    <tr><td class="gt_row gt_left">Age</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (2.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td></tr>
+    <tr><td class="gt_row gt_left">Sex</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Female</td>
+<td class="gt_row gt_center">1,455 (23%)</td>
+<td class="gt_row gt_center">728 (23%)</td>
+<td class="gt_row gt_center">728 (23%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Male</td>
+<td class="gt_row gt_center">1,578 (25%)</td>
+<td class="gt_row gt_center">789 (25%)</td>
+<td class="gt_row gt_center">789 (25%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Spayed/Neutered</td>
+<td class="gt_row gt_center">2,239 (35%)</td>
+<td class="gt_row gt_center">1,120 (35%)</td>
+<td class="gt_row gt_center">1,120 (35%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">1,036 (16%)</td>
+<td class="gt_row gt_center">518 (16%)</td>
+<td class="gt_row gt_center">518 (16%)</td></tr>
+    <tr><td class="gt_row gt_left">Animal.Type</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">CAT</td>
+<td class="gt_row gt_center">3,350 (53%)</td>
+<td class="gt_row gt_center">1,675 (53%)</td>
+<td class="gt_row gt_center">1,675 (53%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">DOG</td>
+<td class="gt_row gt_center">2,076 (33%)</td>
+<td class="gt_row gt_center">1,038 (33%)</td>
+<td class="gt_row gt_center">1,038 (33%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">882 (14%)</td>
+<td class="gt_row gt_center">441 (14%)</td>
+<td class="gt_row gt_center">441 (14%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> n (%); Median (IQR)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+<p>This plot displays the distribution of propensity score between the “jurisdiction in Long Beach” and “jurisdiction in other area” group after being weighted by ATO weights. We can observe that our weighted population are more balanced between these two groups compared to the previously unweighted one, and we can also observe that their distributions are more similar to the original group of “other area” because we have less population in this group at first. It means that the conditional probability of being in other area is relative small in this data set. This conclusion is also confirmed by our weighted table. From this table, we get our weighted population which is smaller than the whole population. By having the weighted population, our population distribution among Long Beach and Other group became balanced and the overall useful sample size shrinked to 6308, with 3154 animals in each group.</p>
+<p>To further check if our weighted propensity score model solved the problem of unbalanced population size between two groups, we calculate and compare the standardized mean difference(SMD) of all the possible confounders between weighted and unweighted outcomes. Details are included in the next section</p>
+</div>
+<div id="part-5-evaluate-propensity-score-model" class="section level1">
+<h1>Part 5: Evaluate propensity score model</h1>
+<div id="smd-and-love-plot" class="section level2">
+<h2>5.1. SMD and Love Plot</h2>
+<p>The standardized mean difference is often used as a statistics to estimate the differences among groups. To be specific, it is calculated as:</p>
+<p><span class="math inline">\(d\)</span> = mean difference of propensity score between groups / standard deviation of propensity score among all observations = <span class="math inline">\((\bar z_{LongBeach} - \bar z_{Other})/ ((s^2_{LongBeach}+s^2_{Ohter})/2)^{1/2}\)</span></p>
+<p>By calculating this value, we are able to figure out if there is a significant difference between groups. In this case, we prefer a small SMD value which indicates a small difference of mean propensity score between groups. We then create a Love Plot which has SMD values on the x-axis and variable names on the y-axis to visualize the SMD between weighted and unweighted outcome. The plot is displayed below:</p>
+<p><img src="final_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>From this love plot, we find that for those variables being handled by weights, their SMDs equal to zero which are better than the unweighted SMD values. While since we also measured some unweighted potential confounders, we figured out several features with larger SMD which also need to be processed by weighting: these includes Intake.Condition, OutcomeYear, was_outcome_alive and Intake.Subtype. Thus, we will refit our propensity score model by weighting these variables using ATO weights based on the previous model.</p>
+</div>
+<div id="refit-the-propensity-score-model" class="section level2">
+<h2>5.2. Refit the Propensity Score Model</h2>
+<p>Refit our propensity score simply repeat the previous steps of fitting a propensity score model with new variables, calculate the ATO weight, calculate SMDs and visualize the result by a love plot. As showed in the newly created love plot, all of our weighted SMDs are smaller than unweighted SMDs, which indicates that we now have a small difference of mean outcome between groups for all confounders.</p>
+<p>Moreover, we still need to check the empirical CDF plots for all continuous variables to see if two groups of these variables are balanced across the whole range of values.</p>
+<p><img src="final_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="final_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+</div>
+<div id="empirical-cdf-plot" class="section level2">
+<h2>5.3. Empirical CDF Plot</h2>
+<p>This plot may sound familiar because it is a plot displaying the estimate of cumulative distribution function. It allows us to plot the data of this variable from smallest to largest and see how this feature distributed across the data set. While in causal analysis, we apply it by plotting both the fitted value and observed value of the same variable to see if their distribution are close to each other. Therefore, we would prefer distributions overlapped with other which means we successfully capture the entire distribution of our exposure variable by using the specified confounders.</p>
+<p>In this case, we have in total of three continuous variables which are: age, intake year, and outcome year. Thus, we create both weighted and unweighted eCDF plots for all three variables in the following:</p>
+<p><img src="final_files/figure-html/unnamed-chunk-41-1.png" width="672" /><img src="final_files/figure-html/unnamed-chunk-41-2.png" width="672" /><img src="final_files/figure-html/unnamed-chunk-41-3.png" width="672" /></p>
+<p><img src="final_files/figure-html/unnamed-chunk-42-1.png" width="672" /><img src="final_files/figure-html/unnamed-chunk-42-2.png" width="672" /><img src="final_files/figure-html/unnamed-chunk-42-3.png" width="672" /></p>
+<p>Actually in this example, both our weight and unweighted empirical CDF plots suggest that two groups in these three continuous variables are balanced across the whole range of values. However our weighted one fits better and so it is still worth it to do a WTO weighting. With this result, we do not need to further transform our confounders to let them fit the propensity model better. So now we are ready to fit our outcome model.</p>
+</div>
+</div>
+<div id="part-6-outcome-model" class="section level1">
+<h1>Part 6: Outcome Model</h1>
+<p>Finally, we are able to fit our outcome model by incorporating the derived propensity score model for our exposure variable. However, similar to LSLR model, the fitted value of jurisdiction includes uncertainty just as we’ve have 95% confidence interval for our estimated <span class="math inline">\(\beta\)</span> term in LSLR model. So in our model fitting, we also want to consider the uncertainty of our estimates by creating a 95% confidence interval for our coefficient of exposure variable as well.</p>
+<p>Thus, instead of simply conduct point estimating for the average causal effect, we applied bootstrapping to estimate the probability weights. In this case, we extracted 1000 samples from the original data set to fit the model respectively. To explain more about the bootstrapping method, we first fit our propensity score model we explored previously; then we calculate this inverse probability weights which indicate the estimated probability of our exposure being observed and we apply this weight when fitting the model of outcome ~ exposure. This model is now our ipw model. Where bootstrapping being added is that we created a 1000 bootstrapped samples from the original data set and so now we have 1000 different data sets with the same observations while different combination of our original data. Then we fit our ipw model to these 1000 data sets and get their fitted coefficients. Then the 95% confidence interval is derived by using t-statistics.</p>
+<p>So the 95% confidence interval of the coefficient of under the jurisdiction of Long Beach is between -5.00 and -1.89, with the mean of estimates equal to -3.39. So this average causal effect result suggests that for animals who may be taken either in the jurisdiction of Long Beach or in other area, their average length of stay in the shelter for those who are in the jurisdiction of Long Beach decreases from 1.89 to 5 days compared to those who are in the jurisdiction of other area.</p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".lower"],"name":[2],"type":["dbl"],"align":["right"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]},{"label":[".upper"],"name":[4],"type":["dbl"],"align":["right"]},{"label":[".alpha"],"name":[5],"type":["dbl"],"align":["right"]},{"label":[".method"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Jurisdiction","2":"-4.997769","3":"-3.391586","4":"-1.887815","5":"0.05","6":"student-t"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="part-7-sensitivity-analysis" class="section level1">
+<h1>Part 7: Sensitivity Analysis</h1>
+<p>As being discussed at the beginning of this example, the way we handle the missing data introduced some bias for our model fitting. Before we conduct a sensitivity analysis to capture this bias, an overview about the sensitivity analysis would be helpful to understand this idea. The way we consider the missing data is to regard them as an unmeasured confounder which affects both the observed exposure and outcome effect. To further explore it, we first examined how are missing data related to our exposure variable. So we checked the missing condition among those variables we used to fit the propensity score model. It turns out that only age included several missing data and so we created this table to explore the missing condition among groups in Jurisdiction.</p>
+<p><img src="final_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<div id="bizgbbtehf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#bizgbbtehf .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#bizgbbtehf .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#bizgbbtehf .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#bizgbbtehf .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#bizgbbtehf .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#bizgbbtehf .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#bizgbbtehf .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#bizgbbtehf .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bizgbbtehf .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bizgbbtehf .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#bizgbbtehf .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#bizgbbtehf .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#bizgbbtehf .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bizgbbtehf .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#bizgbbtehf .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#bizgbbtehf .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bizgbbtehf .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#bizgbbtehf .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bizgbbtehf .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#bizgbbtehf .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bizgbbtehf .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bizgbbtehf .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bizgbbtehf .gt_left {
+  text-align: left;
+}
+
+#bizgbbtehf .gt_center {
+  text-align: center;
+}
+
+#bizgbbtehf .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#bizgbbtehf .gt_font_normal {
+  font-weight: normal;
+}
+
+#bizgbbtehf .gt_font_bold {
+  font-weight: bold;
+}
+
+#bizgbbtehf .gt_font_italic {
+  font-style: italic;
+}
+
+#bizgbbtehf .gt_super {
+  font-size: 65%;
+}
+
+#bizgbbtehf .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#bizgbbtehf .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#bizgbbtehf .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#bizgbbtehf .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#bizgbbtehf .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 30,536<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>LongBeach</strong>, N = 25,982<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Others</strong>, N = 4,554<sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Age</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (3.0, 6.0)</td>
+<td class="gt_row gt_center">4.0 (2.0, 6.0)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">3,774</td>
+<td class="gt_row gt_center">2,930</td>
+<td class="gt_row gt_center">844</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> Median (IQR)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+<p>This table suggests that there are more missing data in the Long Beach group and so it affects more on this group. The prevalence can be calculated for each group as the prevalence of missing for Long Beach jurisdiction is approximately 0.11 and the prevalence of missing for other area is approximately 0.185. Then we are able to estimate</p>
+<p><span class="math inline">\(\beta_{Y~X|U+Z} = \beta_{Y~X|Z} - log(e^{\beta_{Y~U|X+Z}}p_1+(1-p_1)/e^{\beta_{Y~U|X+Z}}p_0+(1-p_0))\)</span></p>
+<p>in our sensitivity analysis, which is the final interval of the coefficient we assumed by capturing the bias of missing data. One more assumption for this sensitivity analysis is that the effect of age on our response variable, the length of stay, after adjusting for the other confounders has a ratio of 2. Thus, by performing the sensitivity analysis of adjusting coefficients with binary prevalence, we get the updated observed effect interval is between -1.64 and -4.75 with an estimation equals to -3.14 by considering the missing data. Therefore, we may now conclude that there is a firm negative association between the length of stay in shelters and animals being taken in the jurisdiction of Long Beach compared to under the jurisdiction of other area.</p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["effect_adjusted"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["effect_observed"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["exposed_p"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["unexposed_p"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["outcome_association"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"-4.752041","2":"-5.00","3":"0.11","4":"0.185","5":"2"},{"1":"-3.142041","2":"-3.39","3":"0.11","4":"0.185","5":"2"},{"1":"-1.642041","2":"-1.89","3":"0.11","4":"0.185","5":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

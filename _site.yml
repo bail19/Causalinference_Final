@@ -1,0 +1,17 @@
+name: "Irene's World of Causal Analysis"
+navbar: 
+  title: "Irene's World of Causal Analysis"
+  left: 
+    - text: "Home"
+      href: index.html
+    - text: "Posts of Casual Analysis"
+      href: final.html
+    - text: "Code-Appendix"
+      href: Code_appendix.html      
+  right: 
+    - icon: fa-github fa-lg
+      href: https://github.com/bail19
+output:
+  html_document:
+    theme: flatly
+output_dir: "."
